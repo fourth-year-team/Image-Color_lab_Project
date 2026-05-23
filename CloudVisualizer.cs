@@ -32,7 +32,6 @@ namespace ImageLabProject
             var pointsList = new List<Point3D>();
             var colorsList = new List<System.Windows.Media.Color>();
 
-            // Higher sampling for smoother cloud now that we have performance optimization
             int step = Math.Max(2, image.Width / 120); 
 
             image.ProcessPixelRows(accessor =>
@@ -118,11 +117,6 @@ namespace ImageLabProject
 
             if (points.Count == 0) return;
 
-            // PERFORMANCE OPTIMIZATION: 
-            // Instead of thousands of individual models, we use ONE single mesh.
-            // Since WPF doesn't support per-vertex colors, we use Texture Mapping.
-            // We create a 1 x N pixel texture where each pixel is one point's color.
-            
             int n = points.Count;
             var bitmap = new WriteableBitmap(n, 1, 96, 96, PixelFormats.Bgra32, null);
             uint[] pixels = new uint[n];
@@ -142,14 +136,11 @@ namespace ImageLabProject
                 var p = points[i];
                 int baseIdx = mesh.Positions.Count;
 
-                // Create a small billboard-like quad (facing Z for simplicity, 
-                // but at this scale it looks like a point from most angles)
                 mesh.Positions.Add(new Point3D(p.X - size, p.Y - size, p.Z));
                 mesh.Positions.Add(new Point3D(p.X + size, p.Y - size, p.Z));
                 mesh.Positions.Add(new Point3D(p.X + size, p.Y + size, p.Z));
                 mesh.Positions.Add(new Point3D(p.X - size, p.Y + size, p.Z));
 
-                // Map all 4 vertices of this quad to the same pixel in our color texture
                 double u = (i + 0.5) / n;
                 mesh.TextureCoordinates.Add(new System.Windows.Point(u, 0.5));
                 mesh.TextureCoordinates.Add(new System.Windows.Point(u, 0.5));
@@ -173,7 +164,6 @@ namespace ImageLabProject
             });
             
             var geometryModel = new GeometryModel3D(mesh, material);
-            // Also add back material to see points from behind
             geometryModel.BackMaterial = material; 
 
             _viewport.Children.Add(new ModelVisual3D { Content = geometryModel });

@@ -31,7 +31,6 @@ namespace ImageLabProject
 
             Image<Rgb24> tempImage = originalImage.CloneAs<Rgb24>();
             
-            // Optimization: Pre-calculate the quantization step
             float factor = 255f / (levels - 1);
 
             tempImage.ProcessPixelRows(accessor =>
@@ -41,7 +40,6 @@ namespace ImageLabProject
                     Span<Rgb24> pixelRow = accessor.GetRowSpan(y);
                     for (int x = 0; x < pixelRow.Length; x++)
                     {
-                        // Standard uniform quantization formula
                         pixelRow[x].R = (byte)(Math.Round(pixelRow[x].R / factor) * factor);
                         pixelRow[x].G = (byte)(Math.Round(pixelRow[x].G / factor) * factor);
                         pixelRow[x].B = (byte)(Math.Round(pixelRow[x].B / factor) * factor);

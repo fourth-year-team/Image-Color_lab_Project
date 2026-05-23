@@ -31,8 +31,6 @@ namespace ImageLabProject
             _visualizer = new CloudVisualizer(RgbViewport);
         }
 
-        // ================= IMPORT =================
-
         private void BtnImport_Click(object sender, RoutedEventArgs e)
         {
             var dlg = new OpenFileDialog
@@ -67,8 +65,6 @@ namespace ImageLabProject
             }
         }
 
-        // ================= IMAGE INFO =================
-
         private void UpdateImageInfo(string path)
         {
             var info = new FileInfo(path);
@@ -80,15 +76,11 @@ namespace ImageLabProject
                 TxtDimensions.Text = $"{_originalImage.Width} x {_originalImage.Height}";
         }
 
-        // ================= VIEW =================
-
         private void UpdateView(Image<Rgb24> image)
         {
             DisplayedImage.Source = ImageProcessor.ConvertToBitmap(image);
             PlaceholderText.Visibility = Visibility.Collapsed;
         }
-
-        // ================= REAL TIME SLIDERS =================
 
         private async void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
@@ -127,8 +119,6 @@ namespace ImageLabProject
             catch { }
         }
 
-        // ================= COLOR SPACE SYSTEM =================
-
         private void ApplyColorSpace(ColorSpace space)
         {
             if (_originalImage == null) return;
@@ -148,8 +138,6 @@ namespace ImageLabProject
             ResetSliders();
         }
 
-        // ================= FILTER ENGINE =================
-
         private void ApplyFilter(Action<IImageProcessingContext> operation)
         {
             if (_originalImage == null) return;
@@ -161,8 +149,6 @@ namespace ImageLabProject
             ResetSliders();
             Task.Run(() => _visualizer.GenerateImageColorCloud(_workingImage, _currentSpace));
         }
-
-        // ================= BUTTONS =================
 
         private void BtnToYUV_Click(object sender, RoutedEventArgs e)
         {
@@ -198,8 +184,6 @@ namespace ImageLabProject
             });
         }
 
-        // ================= RESET =================
-
         private void BtnReset_Click(object sender, RoutedEventArgs e)
         {
             if (_originalImage == null) return;
@@ -219,8 +203,6 @@ namespace ImageLabProject
             _visualizer.Clear();
             Task.Run(() => _visualizer.GenerateImageColorCloud(_workingImage, _currentSpace));
         }
-
-        // ================= SAVE =================
 
         private void BtnSave_Click(object sender, RoutedEventArgs e)
         {
@@ -244,8 +226,6 @@ namespace ImageLabProject
             }
         }
 
-        // ================= RESET SLIDERS =================
-
         private void ResetSliders()
         {
             BrightnessSlider.ValueChanged -= Slider_ValueChanged;
@@ -257,8 +237,6 @@ namespace ImageLabProject
             BrightnessSlider.ValueChanged += Slider_ValueChanged;
             ContrastSlider.ValueChanged += Slider_ValueChanged;
         }
-
-        // ================= DRAG DROP =================
 
         private void ImageControl_DragOver(object sender, DragEventArgs e)
         {
@@ -382,7 +360,7 @@ namespace ImageLabProject
                                     case ColorSpace.Lab:
                                         ColorConverter.RGBToLab(r / 255f, g / 255f, b / 255f, out float L, out float a, out float bl);
                                         L = Math.Clamp(L * v1, 0f, 100f);
-                                        a = a * v2; // 'a' and 'b' can be negative
+                                        a = a * v2; 
                                         bl = bl * v3;
                                         ColorConverter.LabToRGB(L, a, bl, out r, out g, out b);
                                         break;
@@ -416,7 +394,6 @@ namespace ImageLabProject
                     _workingImage?.Dispose();
                     _workingImage = ImageProcessor.ApplyColorQuantization(_originalImage, (int)e.NewValue);
                     
-                    // If we are in a color space, re-apply it to the quantized image
                     if (_currentSpace != ColorSpace.RGB)
                     {
                         ImageProcessor.ApplyColorSpaceToImage(_workingImage!, _currentSpace);
