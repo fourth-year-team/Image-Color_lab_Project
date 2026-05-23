@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ImageLabProject")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+cd40daa735a150ef2637d72d784bde34059f572d")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ae0b24ea7ea7b7b2637f9769fb02ae3633d7a920")]
 [assembly: System.Reflection.AssemblyProductAttribute("ImageLabProject")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ImageLabProject")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
