@@ -467,6 +467,14 @@ private void BtnReset_Click(object sender, RoutedEventArgs e)
     UpdateView(_workingImage);
 
     ResetSliders();
+     RgbViewport.Children.Clear();
+    RgbViewport.Children.Add(new HelixToolkit.Wpf.SunLight());
+
+
+    Task.Run(() =>
+    {
+        GenerateImageColorCloud(_workingImage);
+    });
 }
 
         // ================= SAVE =================
